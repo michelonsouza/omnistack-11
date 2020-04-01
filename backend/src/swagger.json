@@ -1,0 +1,347 @@
+{
+  "openapi": "3.0.0",
+  "explorer": true,
+  "info": {
+    "description": "API for Be The Hero Applications",
+    "version": "1.0.0",
+    "title": "Be the Hero API",
+    "license": {
+      "name": "MIT",
+      "url": "https://choosealicense.com/licenses/mit/"
+    },
+    "contact": {
+      "name": "Michelon Elton de Souza",
+      "url": "https://github.com/michelonsouza",
+      "email": "michelon.souza@hotmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333"
+    }
+  ],
+  "paths": {
+    "/auth": {
+      "post": {
+        "summary": "Request authorization",
+        "operationId": "authStore",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Auth"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Name of respective ONG",
+            "content": {
+              "application/json": {
+                "example": {
+                  "name": "ONG Name"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ongs": {
+      "get": {
+        "summary": "List all ongs in API",
+        "operationId": "ongsIndex",
+        "tags": ["Ongs"],
+        "responses": {
+          "200": {
+            "description": "An Array of Ongs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Ong"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create new Ong",
+        "operationId": "ongsStore",
+        "tags": ["Ongs"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "name": "AACD",
+                  "email": "contato@aacd.com.br",
+                  "whatsapp": "1199999999",
+                  "city": "São Paulo",
+                  "uf": "SP"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "An Array of Ongs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ong"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/incidents": {
+      "get": {
+        "summary": "List all incidents",
+        "operationId": "incidentsIndex",
+        "tags": ["Incidents"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number",
+            "type": "string",
+            "default": "1"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "Limit per-page items",
+            "type": "string",
+            "default": "5"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An Array of Incidents",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Incident"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create new Incident",
+        "operationId": "incidentsStore",
+        "tags": ["Incidents"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "headers",
+            "required": true,
+            "description": "ONG ID for authorization to create new post",
+            "type": "string",
+            "example": "ac536e1z"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "title": "Precisamos de uma cadeira de rodas",
+                  "description": "Uma criança preciaa de uma nova cadiera de rodas em nossa instituição",
+                  "value": 120.01
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "An Array of Incidents",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Incident"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/incidents/{incidentId}": {
+      "delete": {
+        "summary": "Delete an Incident",
+        "operationId": "incidentsDelete",
+        "tags": ["Incidents"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "headers",
+            "required": true,
+            "description": "ONG ID for authorization to create new post",
+            "type": "string",
+            "example": "ac536e1z"
+          },
+          {
+            "name": "incidentId",
+            "in": "path",
+            "required": true,
+            "description": "Incident id what you want delete",
+            "type": "string",
+            "example": "2"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An Array of Incidents",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Incident"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile": {
+      "get": {
+        "summary": "List incidents for especific ONG",
+        "operationId": "profileIndex",
+        "tags": ["Profile"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "headers",
+            "required": true,
+            "description": "ONG ID for authorization to create new post",
+            "type": "string",
+            "example": "ac536e1z"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An Array of Incidents filtered by ong_id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Incident"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Auth": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "id": "ac536e1z"
+        }
+      },
+      "Ong": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "whatsapp": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "uf": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "id": 1,
+          "name": "AACD",
+          "email": "contato@aacd.com.br",
+          "whatsapp": "1199999999",
+          "city": "São Paulo",
+          "uf": "SP"
+        }
+      },
+      "Incident": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          },
+          "ong_id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "whatsapp": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "uf": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
